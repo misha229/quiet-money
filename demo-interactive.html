@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Демо · потрогай Life & Finance OS перед покупкой</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #0E0E10; color: #EDEDED; font-family: -apple-system, "Inter", "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; min-height: 100vh; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* HEADER */
+  header { padding: 24px 0 40px; text-align: center; }
+  header h1 { font-size: 36px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+  header h1 span { background: linear-gradient(120deg, #8B5CF6 0%, #3DDC97 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  header p { color: #9A9AA2; font-size: 16px; max-width: 540px; margin: 0 auto; }
+
+  /* TAB BAR */
+  .tabs { display: flex; gap: 4px; background: #1A1A1D; border: 1px solid #2F2F34; border-radius: 12px; padding: 4px; margin-bottom: 24px; overflow-x: auto; }
+  .tab { flex: 1; min-width: 140px; padding: 12px 14px; text-align: center; cursor: pointer; border-radius: 8px; font-size: 13px; font-weight: 600; color: #C9C9CF; transition: all .15s; white-space: nowrap; }
+  .tab.active { background: #8B5CF6; color: #fff; }
+  .tab:hover:not(.active) { background: rgba(139,92,246,0.10); }
+
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* HOLIDAY BANNER (auto-updates by today's date) */
+  .holiday-banner { background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(86,194,255,0.05)); border-left: 4px solid #8B5CF6; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; font-size: 16px; font-weight: 600; }
+  .holiday-banner.empty { opacity: 0.5; }
+
+  /* DASHBOARD GRID */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .card { background: #1A1A1D; border: 1px solid #2F2F34; border-radius: 14px; padding: 20px; }
+  .card .label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #9A9AA2; margin-bottom: 6px; }
+  .card .big { font-size: 32px; font-weight: 800; line-height: 1.1; }
+  .card.mint .big { color: #3DDC97; }
+  .card.amber .big { color: #FFB454; }
+  .card.coral .big { color: #FF5C5C; }
+  .card.violet .big { color: #8B5CF6; }
+  .card .sub { font-size: 13px; color: #9A9AA2; margin-top: 4px; }
+
+  /* PROGRESS BARS */
+  .bar-row { padding: 14px 0; border-bottom: 1px solid #242428; }
+  .bar-row:last-child { border-bottom: 0; }
+  .bar-row .top { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+  .bar-row .bar { height: 8px; background: #242428; border-radius: 4px; overflow: hidden; }
+  .bar-row .bar div { height: 100%; border-radius: 4px; transition: width .4s; }
+
+  /* TRANSACTIONS TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 12px; }
+  th { text-align: left; padding: 10px 12px; color: #9A9AA2; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid #2F2F34; font-weight: 600; }
+  td { padding: 12px; border-bottom: 1px solid #242428; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.income { color: #3DDC97; }
+  td.expense { color: #FFB454; }
+  tr:hover td { background: rgba(139,92,246,0.04); }
+  .tx-actions { display: flex; gap: 8px; margin: 16px 0; }
+  .btn { background: #8B5CF6; color: #fff; padding: 10px 18px; border: none; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; transition: transform .15s; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.ghost { background: transparent; border: 1px solid #2F2F34; color: #C9C9CF; }
+  .btn.ghost:hover { border-color: #8B5CF6; }
+
+  /* HABITS */
+  .habit-row { display: grid; grid-template-columns: 1fr repeat(7, 36px); gap: 8px; padding: 12px 0; border-bottom: 1px solid #242428; align-items: center; font-size: 14px; }
+  .habit-row .check { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #2F2F34; cursor: pointer; transition: all .15s; }
+  .habit-row .check:hover { border-color: #3DDC97; }
+  .habit-row .check.done { background: #3DDC97; border-color: #3DDC97; position: relative; }
+  .habit-row .check.done::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; color: #0E0E10; font-weight: 800; }
+  .habit-row .day-label { font-size: 10px; color: #9A9AA2; text-align: center; }
+
+  /* HOLIDAY SETUP */
+  .region-row { display: flex; align-items: center; padding: 12px 16px; background: #0E0E10; border-radius: 10px; margin-bottom: 8px; border: 1px solid #242428; cursor: pointer; transition: all .15s; }
+  .region-row:hover { border-color: #8B5CF6; }
+  .region-row.active { background: rgba(61,220,151,0.06); border-color: rgba(61,220,151,0.4); }
+  .region-row .check { width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #2F2F34; margin-right: 14px; flex-shrink: 0; }
+  .region-row.active .check { background: #3DDC97; border-color: #3DDC97; position: relative; }
+  .region-row.active .check::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; color: #0E0E10; font-weight: 800; font-size: 14px; }
+  .region-row .name { flex: 1; font-weight: 600; }
+  .region-row .count { font-size: 12px; color: #9A9AA2; }
+
+  /* YEAR CALENDAR */
+  .year-grid { display: grid; grid-template-columns: 50px repeat(31, 1fr); gap: 2px; font-size: 9px; }
+  .year-grid .month-label { padding: 4px 8px; text-align: right; color: #FFB454; font-weight: 700; font-size: 11px; align-self: center; }
+  .year-grid .day { aspect-ratio: 1; background: #242428; border-radius: 3px; display: grid; place-items: center; font-size: 10px; cursor: pointer; transition: transform .1s; position: relative; }
+  .year-grid .day:hover { transform: scale(1.3); z-index: 10; }
+  .year-grid .day.mint { background: rgba(61,220,151,0.25); color: #3DDC97; }
+  .year-grid .day.coral { background: rgba(255,92,92,0.25); color: #FF5C5C; }
+  .year-grid .day.violet { background: rgba(139,92,246,0.25); color: #8B5CF6; }
+  .year-grid .day.amber { background: rgba(255,180,84,0.25); color: #FFB454; }
+  .year-grid .day.sky { background: rgba(86,194,255,0.25); color: #56C2FF; }
+  .year-grid .day-num-header { font-size: 9px; color: #9A9AA2; text-align: center; padding: 4px 0; }
+
+  /* CTA BAR */
+  .cta-bar { position: sticky; bottom: 20px; margin-top: 40px; background: linear-gradient(135deg, rgba(139,92,246,0.95), rgba(61,220,151,0.85)); padding: 18px 26px; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 10px 40px rgba(139,92,246,0.4); }
+  .cta-bar .text { color: #fff; font-weight: 700; font-size: 16px; }
+  .cta-bar .cta-btn { background: #0E0E10; color: #fff; padding: 14px 24px; border-radius: 10px; font-weight: 700; text-decoration: none; flex-shrink: 0; transition: transform .15s; }
+  .cta-bar .cta-btn:hover { transform: translateY(-2px); }
+
+  .demo-tag { display: inline-block; background: #FFB454; color: #0E0E10; font-size: 10px; padding: 3px 8px; border-radius: 999px; font-weight: 800; letter-spacing: 0.1em; margin-left: 8px; vertical-align: middle; }
+
+  @media (max-width: 720px) {
+    .grid, .grid-3 { grid-template-columns: 1fr; }
+    .habit-row { grid-template-columns: 1fr repeat(7, 28px); gap: 4px; }
+    header h1 { font-size: 28px; }
+    .year-grid { grid-template-columns: 36px repeat(31, 1fr); }
+    .year-grid .day { font-size: 0; }
+    .cta-bar { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <h1>🎮 Демо <span>Life & Finance OS</span><span class="demo-tag">INTERACTIVE</span></h1>
+  <p>Это работающая мини-копия продукта. Кликай по галочкам, переключай регионы, добавляй транзакции — всё реально считается. Данные не сохраняются, ничего не отправляется.</p>
+</header>
+
+<!-- LIVE HOLIDAY BANNER -->
+<div id="holiday-banner" class="holiday-banner empty">
+  ℹ️ Сегодня обычный день · баннер откроется в особые даты. <span style="color:#9A9AA2; font-size:13px;">Переключи регионы ниже чтобы посмотреть</span>
+</div>
+
+<!-- TABS -->
+<div class="tabs" role="tablist">
+  <div class="tab active" onclick="showTab('dashboard')">📊 Dashboard</div>
+  <div class="tab" onclick="showTab('transactions')">💸 Transactions</div>
+  <div class="tab" onclick="showTab('habits')">🎯 Habits</div>
+  <div class="tab" onclick="showTab('holidays')">⚙️ Holiday Setup</div>
+  <div class="tab" onclick="showTab('calendar')">📅 Year</div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="panel active" id="panel-dashboard">
+  <div class="grid">
+    <div class="card mint">
+      <div class="label">💰 Накоплено</div>
+      <div class="big" id="kpi-saved">78 500 ₽</div>
+      <div class="sub">+12 300₽ за месяц</div>
+    </div>
+    <div class="card mint">
+      <div class="label">📈 Доход</div>
+      <div class="big" id="kpi-income">145 000 ₽</div>
+      <div class="sub">за июнь 2026</div>
+    </div>
+    <div class="card amber">
+      <div class="label">📉 Расход</div>
+      <div class="big" id="kpi-expense">67 200 ₽</div>
+      <div class="sub">53% бюджета</div>
+    </div>
+    <div class="card violet">
+      <div class="label">🎯 Цели</div>
+      <div class="big" id="kpi-goals">4/6</div>
+      <div class="sub">67% выполнено</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <div class="label" style="margin-bottom: 14px;">📊 БЮДЖЕТЫ ПО КАТЕГОРИЯМ</div>
+    <div id="budgets"></div>
+  </div>
+</div>
+
+<!-- TRANSACTIONS -->
+<div class="panel" id="panel-transactions">
+  <div class="tx-actions">
+    <button class="btn" onclick="addTx()">➕ Добавить транзакцию</button>
+    <button class="btn ghost" onclick="resetTx()">↺ Сбросить демо</button>
+  </div>
+  <div class="card">
+    <table>
+      <thead><tr><th>Дата</th><th>Категория</th><th>Заметка</th><th class="num">Сумма</th></tr></thead>
+      <tbody id="tx-tbody"></tbody>
+    </table>
+  </div>
+  <p style="margin-top: 14px; font-size: 13px; color: #9A9AA2;">
+    💡 В реальном продукте — Dashboard сверху обновляется автоматически по этим данным.
+  </p>
+</div>
+
+<!-- HABITS -->
+<div class="panel" id="panel-habits">
+  <div class="card">
+    <div class="label" style="margin-bottom: 14px;">🎯 ПРИВЫЧКИ · НЕДЕЛЯ 24 (Пн-Вс)</div>
+    <div id="habits"></div>
+    <div style="margin-top: 16px; padding: 14px; background: #0E0E10; border-radius: 10px; font-size: 14px;">
+      🔥 Streak: <strong id="streak" style="color:#FFB454;">12 days</strong> · 
+      Завершено сегодня: <strong id="done-today" style="color:#3DDC97;">3/5</strong>
+    </div>
+  </div>
+</div>
+
+<!-- HOLIDAY SETUP -->
+<div class="panel" id="panel-holidays">
+  <p style="font-size:14px; color: #9A9AA2; margin-bottom: 16px;">Кликни на регион чтобы включить/выключить. Live-баннер сверху обновится сразу.</p>
+  <div id="regions"></div>
+</div>
+
+<!-- YEAR CALENDAR -->
+<div class="panel" id="panel-calendar">
+  <div class="card">
+    <div class="label" style="margin-bottom: 14px;">📅 ГОД НА ОДНОМ ЭКРАНЕ · кликни на ячейку чтобы увидеть событие</div>
+    <div id="year-grid" class="year-grid"></div>
+    <div id="day-tooltip" style="margin-top: 16px; padding: 14px; background: #0E0E10; border-radius: 10px; font-size: 14px; color: #9A9AA2;">
+      Кликни на цветную ячейку выше →
+    </div>
+  </div>
+</div>
+
+<!-- CTA BAR -->
+<div class="cta-bar">
+  <div class="text">🖤 Нравится? Получи полную версию — 1 990 ₽ навсегда</div>
+  <a href="https://t.me/LifeFinanceOSbot?start=buy_v12" class="cta-btn">Купить →</a>
+</div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════
+
+const REGIONS = {
+  "GLOBAL": { label: "🌍 Глобальные", events: [
+    { mmdd: "12-31:01-07", color: "amber",  text: "🎄 НОВЫЙ ГОД · подведи итоги года" },
+    { mmdd: "02-14",       color: "coral",  text: "❤️ ВАЛЕНТИНА · попробуй Couples Edition" },
+    { mmdd: "10-31",       color: "amber",  text: "🎃 ХЭЛЛОУИН · самое страшное — открыть свой бюджет" },
+    { mmdd: "11-25:11-30", color: "coral",  text: "🛍 BLACK FRIDAY · не покупай ничего что не в бюджете" },
+    { mmdd: "12-01:12-25", color: "violet", text: "🎁 ДЕКАБРЬ · заложи бюджет на подарки заранее" },
+  ]},
+  "RU": { label: "🇷🇺 Россия", events: [
+    { mmdd: "01-01:01-08", color: "amber",  text: "🎄 НОВОГОДНИЕ КАНИКУЛЫ · отслеживай развлекательные траты" },
+    { mmdd: "02-23",       color: "sky",    text: "🛡 23 ФЕВРАЛЯ · подари себе систему которая работает" },
+    { mmdd: "03-08",       color: "coral",  text: "🌷 8 МАРТА · красивая таблица — лучший подарок" },
+    { mmdd: "05-08:05-09", color: "amber",  text: "🎖 9 МАЯ · спасибо тем кто берёг твоё будущее" },
+    { mmdd: "06-12",       color: "sky",    text: "🇷🇺 ДЕНЬ РОССИИ · отличный день для финансового аудита" },
+    { mmdd: "04-25:04-30", color: "coral",  text: "📋 ДЕДЛАЙН 3-НДФЛ · до 30 апреля. Не забудь декларацию" },
+    { mmdd: "07-25:07-28", color: "coral",  text: "💼 ИП/УСН АВАНС · до 28 июля. Закладывай заранее" },
+    { mmdd: "11-04",       color: "violet", text: "🤝 ДЕНЬ НАРОДНОГО ЕДИНСТВА · короткая неделя" },
+  ]},
+  "US": { label: "🇺🇸 USA", events: [
+    { mmdd: "04-10:04-15", color: "coral",  text: "💼 TAX DAY APR 15 · file your return!" },
+    { mmdd: "07-04",       color: "amber",  text: "🎆 INDEPENDENCE DAY · fireworks > overspending" },
+    { mmdd: "11-22:11-28", color: "amber",  text: "🦃 THANKSGIVING · gratitude > consumption" },
+    { mmdd: "12-24:12-26", color: "violet", text: "🎄 CHRISTMAS · final budget check of the year" },
+  ]},
+  "CN": { label: "🇨🇳 中国", events: [
+    { mmdd: "02-10:02-17", color: "coral",  text: "🧧 春节 · 红包预算计划好了吗" },
+    { mmdd: "10-01:10-07", color: "amber",  text: "🇨🇳 国庆节 · 黄金周开销盯紧" },
+    { mmdd: "11-11",       color: "coral",  text: "🛍 双十一 · 只买预算里的东西" },
+  ]},
+  "JP": { label: "🇯🇵 日本", events: [
+    { mmdd: "01-01:01-03", color: "amber",  text: "🎍 お正月 · お年玉と初詣、予算組んだ?" },
+    { mmdd: "04-29:05-05", color: "mint",   text: "🌸 ゴールデンウィーク · 旅行費を確認" },
+    { mmdd: "03-10:03-15", color: "coral",  text: "💼 確定申告 · 期限 3月15日" },
+  ]},
+};
+
+const enabledRegions = new Set(["GLOBAL", "RU"]);
+
+let TRANSACTIONS = [
+  { date: "2026-06-15", cat: "💼 Зарплата",     note: "Аванс", amt:  72000, type:"in" },
+  { date: "2026-06-14", cat: "🛒 Еда",          note: "Перекрёсток", amt:  -3420, type:"out" },
+  { date: "2026-06-14", cat: "🚇 Транспорт",    note: "Такси", amt:   -780, type:"out" },
+  { date: "2026-06-13", cat: "🎬 Развлечения",  note: "Кино", amt:  -1200, type:"out" },
+  { date: "2026-06-12", cat: "🏠 Жильё",        note: "Аренда", amt: -45000, type:"out" },
+  { date: "2026-06-10", cat: "💡 Подписки",     note: "Spotify", amt:  -299, type:"out" },
+];
+
+const BUDGETS = [
+  { name: "🏠 Жильё",       spent: 45000, limit: 50000, color: "#3DDC97" },
+  { name: "🛒 Еда",         spent: 12400, limit: 18000, color: "#3DDC97" },
+  { name: "🚇 Транспорт",   spent:  4200, limit:  5000, color: "#FFB454" },
+  { name: "💡 Подписки",    spent:  1800, limit:  2000, color: "#FFB454" },
+  { name: "🎬 Развлечения", spent:  5500, limit:  6000, color: "#FF5C5C" },
+  { name: "🏥 Здоровье",    spent:  1900, limit:  3000, color: "#3DDC97" },
+];
+
+const HABITS = [
+  { name: "☕ Не пить кофе",  days: [1,1,0,1,1,0,0] },
+  { name: "🏃 Утренняя пробежка", days: [1,1,1,1,0,0,0] },
+  { name: "📚 Чтение 30 мин",  days: [1,1,1,1,1,1,0] },
+  { name: "💧 8 стаканов воды", days: [1,0,1,1,1,0,0] },
+  { name: "😴 Сон до 23:00",   days: [0,1,1,1,0,0,0] },
+];
+
+// ═══════════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════════
+
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+function isDateInMMDDRange(mmdd, today) {
+  const m = today.getMonth() + 1, d = today.getDate();
+  if (mmdd.includes(':')) {
+    const [start, end] = mmdd.split(':');
+    const [sm, sd] = start.split('-').map(Number);
+    const [em, ed] = end.split('-').map(Number);
+    if (sm === em) return m === sm && d >= sd && d <= ed;
+    if (sm < em) {
+      if (m === sm && d >= sd) return true;
+      if (m > sm && m < em) return true;
+      if (m === em && d <= ed) return true;
+    } else {
+      // crosses year
+      if (m === sm && d >= sd) return true;
+      if (m === em && d <= ed) return true;
+    }
+    return false;
+  } else {
+    const [mm, dd] = mmdd.split('-').map(Number);
+    return m === mm && d === dd;
+  }
+}
+
+function findActiveEvent() {
+  const today = new Date();
+  for (const key of enabledRegions) {
+    const region = REGIONS[key];
+    if (!region) continue;
+    for (const ev of region.events) {
+      if (isDateInMMDDRange(ev.mmdd, today)) return { ...ev, region: region.label };
+    }
+  }
+  return null;
+}
+
+function renderBanner() {
+  const banner = document.getElementById('holiday-banner');
+  const ev = findActiveEvent();
+  if (ev) {
+    banner.classList.remove('empty');
+    banner.style.borderLeftColor = {mint:'#3DDC97',coral:'#FF5C5C',violet:'#8B5CF6',amber:'#FFB454',sky:'#56C2FF'}[ev.color];
+    banner.innerHTML = `${ev.text} <span style="color:#9A9AA2; font-size:13px; margin-left:8px;">${ev.region}</span>`;
+  } else {
+    // Демо-режим: если сегодня обычный день, всё равно покажем пример из активных регионов
+    const sampleRegion = REGIONS[[...enabledRegions][0]];
+    if (sampleRegion && sampleRegion.events[0]) {
+      const sample = sampleRegion.events[0];
+      banner.classList.add('empty');
+      banner.style.borderLeftColor = {mint:'#3DDC97',coral:'#FF5C5C',violet:'#8B5CF6',amber:'#FFB454',sky:'#56C2FF'}[sample.color];
+      banner.innerHTML = `<span style="color:#9A9AA2; font-size:13px;">Сегодня нет события. Когда наступит — здесь будет что-то вроде:</span><br>${sample.text}`;
+    } else {
+      banner.classList.add('empty');
+      banner.innerHTML = '⚙️ Включи хотя бы один регион в Holiday Setup чтобы баннер работал';
+    }
+  }
+}
+
+function renderBudgets() {
+  const el = document.getElementById('budgets');
+  el.innerHTML = BUDGETS.map(b => {
+    const pct = Math.min(100, Math.round(100 * b.spent / b.limit));
+    return `<div class="bar-row">
+      <div class="top"><span>${b.name}</span><span>${b.spent.toLocaleString('ru-RU')}₽ / ${b.limit.toLocaleString('ru-RU')}₽ <strong style="color:${b.color}">(${pct}%)</strong></span></div>
+      <div class="bar"><div style="width:${pct}%; background:${b.color};"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderTransactions() {
+  const tbody = document.getElementById('tx-tbody');
+  tbody.innerHTML = TRANSACTIONS.map(tx => {
+    const cls = tx.type === 'in' ? 'income' : 'expense';
+    const sign = tx.amt > 0 ? '+' : '';
+    return `<tr>
+      <td style="color:#9A9AA2;">${tx.date}</td>
+      <td>${tx.cat}</td>
+      <td style="color:#9A9AA2;">${tx.note}</td>
+      <td class="num ${cls}">${sign}${tx.amt.toLocaleString('ru-RU')} ₽</td>
+    </tr>`;
+  }).join('');
+  recalcKPI();
+}
+
+function recalcKPI() {
+  const income = TRANSACTIONS.filter(t => t.type==='in').reduce((s,t)=>s+t.amt,0);
+  const expense = -TRANSACTIONS.filter(t => t.type==='out').reduce((s,t)=>s+t.amt,0);
+  document.getElementById('kpi-income').textContent = income.toLocaleString('ru-RU') + ' ₽';
+  document.getElementById('kpi-expense').textContent = expense.toLocaleString('ru-RU') + ' ₽';
+  document.getElementById('kpi-saved').textContent = (income - expense).toLocaleString('ru-RU') + ' ₽';
+}
+
+function addTx() {
+  const cats = ["🛒 Еда","🚇 Транспорт","🎬 Развлечения","💡 Подписки","🏥 Здоровье"];
+  const cat = cats[Math.floor(Math.random()*cats.length)];
+  const amt = -Math.floor(Math.random()*3000 + 200);
+  const today = new Date().toISOString().slice(0,10);
+  TRANSACTIONS.unshift({ date: today, cat, note: "Новая трата", amt, type:"out" });
+  renderTransactions();
+}
+
+function resetTx() {
+  location.reload();
+}
+
+const DAYS = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+function renderHabits() {
+  const el = document.getElementById('habits');
+  el.innerHTML = `
+    <div class="habit-row" style="border-bottom:1px solid #2F2F34;">
+      <div style="font-size:11px; color:#9A9AA2; letter-spacing:0.08em; text-transform:uppercase;">Привычка</div>
+      ${DAYS.map(d => `<div class="day-label">${d}</div>`).join('')}
+    </div>
+    ${HABITS.map((h,i) => `
+      <div class="habit-row">
+        <div>${h.name}</div>
+        ${h.days.map((done,d) => `<div class="check ${done?'done':''}" onclick="toggleHabit(${i},${d})"></div>`).join('')}
+      </div>
+    `).join('')}
+  `;
+  recalcHabits();
+}
+
+function toggleHabit(i, d) {
+  HABITS[i].days[d] = HABITS[i].days[d] ? 0 : 1;
+  renderHabits();
+}
+
+function recalcHabits() {
+  const todayIdx = (new Date().getDay() + 6) % 7;  // Пн=0...Вс=6
+  const doneToday = HABITS.filter(h => h.days[todayIdx]).length;
+  document.getElementById('done-today').textContent = `${doneToday}/${HABITS.length}`;
+}
+
+function renderRegions() {
+  const el = document.getElementById('regions');
+  el.innerHTML = Object.entries(REGIONS).map(([key, r]) => `
+    <div class="region-row ${enabledRegions.has(key)?'active':''}" onclick="toggleRegion('${key}')">
+      <div class="check"></div>
+      <div class="name">${r.label}</div>
+      <div class="count">${r.events.length} событий</div>
+    </div>
+  `).join('');
+}
+
+function toggleRegion(key) {
+  if (enabledRegions.has(key)) enabledRegions.delete(key);
+  else enabledRegions.add(key);
+  renderRegions();
+  renderBanner();
+  renderYearGrid();
+}
+
+function renderYearGrid() {
+  const MONTHS = ["ЯНВ","ФЕВ","МАР","АПР","МАЙ","ИЮН","ИЮЛ","АВГ","СЕН","ОКТ","НОЯ","ДЕК"];
+  const DAYS_IN = [31,29,31,30,31,30,31,31,30,31,30,31];
+
+  // Сбор всех событий из активных регионов
+  const dayMap = {};
+  for (const key of enabledRegions) {
+    const region = REGIONS[key];
+    if (!region) continue;
+    for (const ev of region.events) {
+      const ranges = ev.mmdd.includes(':') ? [ev.mmdd] : [ev.mmdd + ':' + ev.mmdd];
+      ranges.forEach(r => {
+        const [start, end] = r.split(':');
+        const [sm,sd]=start.split('-').map(Number);
+        const [em,ed]=end.split('-').map(Number);
+        const fillRange = (m1,d1,m2,d2) => {
+          for (let m=m1; m<=m2; m++) {
+            const ds = (m===m1)?d1:1;
+            const de = (m===m2)?d2:DAYS_IN[m-1];
+            for (let d=ds; d<=de; d++) {
+              const k = `${m}-${d}`;
+              if (!dayMap[k]) dayMap[k] = [];
+              dayMap[k].push({ ...ev, region: region.label });
+            }
+          }
+        };
+        if (sm <= em) fillRange(sm,sd,em,ed);
+        else { fillRange(sm,sd,12,31); fillRange(1,1,em,ed); }
+      });
+    }
+  }
+
+  let html = '<div class="month-label"></div>';
+  for (let d=1; d<=31; d++) html += `<div class="day-num-header">${d}</div>`;
+
+  for (let m=1; m<=12; m++) {
+    html += `<div class="month-label">${MONTHS[m-1]}</div>`;
+    for (let d=1; d<=31; d++) {
+      if (d > DAYS_IN[m-1]) { html += '<div style="background:transparent;"></div>'; continue; }
+      const k = `${m}-${d}`;
+      const events = dayMap[k];
+      if (events && events.length) {
+        const ev = events[0];
+        html += `<div class="day ${ev.color}" onclick="showDay('${k}')" title="${ev.text}">•</div>`;
+      } else {
+        html += `<div class="day"></div>`;
+      }
+    }
+  }
+  document.getElementById('year-grid').innerHTML = html;
+  window._dayMap = dayMap;
+}
+
+function showDay(k) {
+  const events = window._dayMap[k] || [];
+  const el = document.getElementById('day-tooltip');
+  if (!events.length) { el.textContent = 'Нет событий'; return; }
+  el.innerHTML = events.map(ev => `<div style="margin-bottom:6px;"><strong style="color:#EDEDED;">${ev.text}</strong><br><span style="font-size:12px;">${ev.region}</span></div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+renderBanner();
+renderBudgets();
+renderTransactions();
+renderHabits();
+renderRegions();
+renderYearGrid();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Что нового · Life & Finance OS · Changelog</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #0E0E10; color: #EDEDED; font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  a { color: #56C2FF; }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
+
+  h1 { font-size: 48px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
+  h1 span { background: linear-gradient(120deg, #8B5CF6 0%, #3DDC97 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .sub { font-size: 18px; color: #9A9AA2; margin-bottom: 48px; }
+
+  .release { margin-bottom: 48px; padding-left: 28px; border-left: 2px solid #2F2F34; position: relative; }
+  .release::before { content: ""; position: absolute; left: -7px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background: #8B5CF6; box-shadow: 0 0 0 4px #0E0E10; }
+  .release.current::before { background: #3DDC97; box-shadow: 0 0 0 4px #0E0E10, 0 0 24px #3DDC97; }
+
+  .release h2 { font-size: 28px; margin-bottom: 4px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .badge { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
+  .badge.now { background: rgba(61,220,151,0.15); color: #3DDC97; border: 1px solid rgba(61,220,151,0.4); }
+  .badge.free { background: rgba(86,194,255,0.15); color: #56C2FF; border: 1px solid rgba(86,194,255,0.4); }
+  .badge.upcoming { background: rgba(255,180,84,0.12); color: #FFB454; border: 1px solid rgba(255,180,84,0.35); }
+
+  .date { font-size: 13px; color: #9A9AA2; margin-bottom: 18px; letter-spacing: 0.05em; }
+
+  .changes h3 { font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: #FFB454; margin-top: 22px; margin-bottom: 10px; }
+  .changes ul { list-style: none; padding: 0; }
+  .changes li { padding: 8px 0 8px 26px; position: relative; color: #C9C9CF; font-size: 15px; }
+  .changes li::before { content: "•"; position: absolute; left: 8px; color: #3DDC97; font-weight: 800; }
+  .changes li.fix::before { content: "🐛"; left: 4px; font-size: 12px; }
+  .changes li.new::before { content: "✨"; left: 4px; font-size: 12px; }
+  .changes li.improve::before { content: "⚡"; left: 4px; font-size: 12px; }
+  .changes li.breaking::before { content: "⚠"; left: 4px; }
+
+  .note { padding: 18px 22px; background: rgba(139,92,246,0.08); border-left: 3px solid #8B5CF6; border-radius: 8px; margin-top: 18px; font-size: 15px; color: #C9C9CF; }
+
+  .footer { margin-top: 60px; padding-top: 28px; border-top: 1px solid #2F2F34; text-align: center; color: #9A9AA2; font-size: 14px; }
+  .footer a { color: #8B5CF6; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <h1>📦 <span>Changelog</span></h1>
+  <p class="sub">Всё что изменилось. По датам, по версиям. Без скрытого мусора.</p>
+
+  <!-- v1.2 (CURRENT) -->
+  <div class="release current">
+    <h2>v1.2 · Multi-Region Update <span class="badge now">CURRENT</span> <span class="badge free">FREE FOR v1.x</span></h2>
+    <div class="date">16 июня 2026</div>
+
+    <div class="changes">
+      <h3>🆕 Новое</h3>
+      <ul>
+        <li class="new">29 регионов с местными праздниками: RU, UA, KZ, BY, US, EU, DE, ES, FR, IT, PL, TR, AE, GB, CA, AU, KR, VN, TH, ZA, NG, EG, ID, CN, JP, IN, MX, BR + GLOBAL</li>
+        <li class="new">183 события — государственные праздники + налоговые дедлайны (3-НДФЛ, УСН, НПД, IRS Tax Day, HMRC, SARS, ATO EOFY, etc.)</li>
+        <li class="new">Лист ⚙️ HOLIDAY SETUP — выбираешь свои страны галочкой ✓</li>
+        <li class="new">Лист 🎄 SEASONAL BANNER — на DASHBOARD сам показывает актуальный праздник</li>
+        <li class="new">Лист 📅 YEAR CALENDAR — 12×31 цветной год, 262 дня маркировано</li>
+        <li class="new">Лист 🏆 ACHIEVEMENTS — 15 milestones (100 дней с системой, 500 транзакций, год в плюсе, 100К сэкономлено)</li>
+        <li class="new">Telegram-бот напоминаний за 7/3/1/0 дней до события</li>
+        <li class="new">Pro-bundle единый файл (11 листов)</li>
+        <li class="new">Lite-версия для Excel 2010-2016 и Numbers ≤10</li>
+        <li class="new">Локализация holidays на 10 языков (en/es/zh/hi/ar/pt/ja/de/fr/ru)</li>
+      </ul>
+
+      <h3>⚡ Улучшения</h3>
+      <ul>
+        <li class="improve">Поддержка високосного года: 02-29 события показываются 28 февраля в обычные годы (правило 4/100/400 до 2400)</li>
+        <li class="improve">Sales page переработана — секция "What's New", multi-platform превью, anti-subscription guarantee</li>
+        <li class="improve">Tribute checkout updated: явно "разовая покупка · навсегда"</li>
+      </ul>
+
+      <h3>🐛 Исправлено</h3>
+      <ul>
+        <li class="fix">font() helper в seasonal-модуле потерял параметр italic — добавлен</li>
+        <li class="fix">Длинные IFS формулы (>8K символов) разбиты на подформулы по регионам</li>
+      </ul>
+    </div>
+
+    <div class="note">
+      🖤 <strong>Существующим v1.x покупателям:</strong> ссылка на скачивание уже в твоей почте/TG.
+      Если не получил — напиши в @LifeFinanceOSbot.
+    </div>
+  </div>
+
+  <!-- v1.1 -->
+  <div class="release">
+    <h2>v1.1 · Reminders & Smart Insights</h2>
+    <div class="date">февраль 2026</div>
+    <div class="changes">
+      <h3>🆕 Новое</h3>
+      <ul>
+        <li class="new">In-product reminders: воскресный ритуал, мондей-старт, midweek-check, начало/конец месяца</li>
+        <li class="new">Push-уведомления (PWA) — bell-icon в браузере</li>
+        <li class="new">TG-бот daily summary</li>
+        <li class="new">Smart Insights — авто-анализ: «Категория Х выросла на N%», «дорогой день недели — Пт»</li>
+        <li class="new">Локализованные напоминания на 10 языков</li>
+        <li class="new">Seasonal modes (НГ, 14.02, 23.02, 8.03, 9.05, Black Friday, Хэллоуин)</li>
+      </ul>
+      <h3>⚡ Улучшения</h3>
+      <ul>
+        <li class="improve">Cross-sell engine добавлен (+28% LTV)</li>
+        <li class="improve">Auto-pivot engine с 6 бенчмарками</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- v1.0 -->
+  <div class="release">
+    <h2>v1.0 · Launch</h2>
+    <div class="date">октябрь 2025</div>
+    <div class="changes">
+      <h3>🆕 Первый релиз</h3>
+      <ul>
+        <li class="new">5 листов: 📖 READ ME · ⚙️ SETUP · 💸 TRANSACTIONS · 📊 DASHBOARD · 🎯 HABITS & GOALS</li>
+        <li class="new">Aesthetic dark mode дизайн (Charcoal/Graphite palette)</li>
+        <li class="new">Авто-обновляемый dashboard с live KPI</li>
+        <li class="new">15 встроенных привычек + 7-tier motivational engine</li>
+        <li class="new">10 локализаций (en/es/zh/hi/ar/pt/ja/de/fr/ru)</li>
+        <li class="new">Web-app (PWA) standalone версия</li>
+        <li class="new">Google Apps Script автоматизация</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="release">
+    <h2>v2.0 · Coming Soon <span class="badge upcoming">PLANNED</span></h2>
+    <div class="date">~ 2027</div>
+    <div class="changes">
+      <h3>🔮 В работе</h3>
+      <ul>
+        <li class="new">Полностью переработанный DASHBOARD с настраиваемыми виджетами</li>
+        <li class="new">Multi-account support (личный + семейный + бизнес)</li>
+        <li class="new">Импорт банковских выписок (CSV/OFX/QIF)</li>
+        <li class="new">Инвест-портфолио встроено (бывший Investment Tracker)</li>
+        <li class="new">Apple/Galaxy Watch widgets</li>
+        <li class="new">Голосовой ввод транзакций (Алиса, Siri)</li>
+      </ul>
+    </div>
+
+    <div class="note">
+      v2.0 будет также <strong>бесплатным апгрейдом</strong> для всех v1.x покупателей.
+      Только v3.0 (через 2-3 года, новая архитектура) — будет платным upgrade (со скидкой 50% для existing-юзеров).
+      <br><br>
+      Хочешь повлиять на roadmap? Голосуй за фичи в <a href="https://t.me/LifeFinanceOSbot?start=roadmap">@LifeFinanceOSbot → /roadmap</a> 🖤
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Подписаться на обновления → <a href="https://t.me/lifefinanceos">@lifefinanceos</a></p>
+    <p style="margin-top:10px;">🖤 Сделано чтобы пользоваться 5+ лет, а не выкинуть через месяц.</p>
+  </div>
+
+</div>
+
+</body>
+</html>
