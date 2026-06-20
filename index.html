@@ -328,11 +328,18 @@
     <span class="eyebrow">Сначала почитать</span>
     <h2>Decoder Ring · 7 принципов тихих денег</h2>
     <p>Бесплатный PDF на 10 страниц. Плюс — раз в неделю по воскресеньям одна спокойная мысль. Без шума.</p>
-    <form class="capture-form" id="capture-form" onsubmit="return submitEmail(event)">
-      <input type="email" name="email" placeholder="ваш email" required />
+    <form class="capture-form" id="capture-form"
+          action="mailto:uporeckov229@mail.ru"
+          method="POST"
+          enctype="text/plain">
+      <input type="email" name="Подписчик" placeholder="ваш email" required />
       <button type="submit">Получить PDF</button>
     </form>
     <p class="whisper">Без спама. Отписаться в один клик в любом письме.</p>
+    <p class="whisper" style="margin-top: 8px; font-size: 12px;">
+      Не работает кнопка? Напишите вручную:
+      <a href="/cdn-cgi/l/email-protection#ff8a8f908d9a9c949089cdcdc6bf929e9693d18d8ac08c8a9d959a9c8bc22f602f412f4b2f402f472e7e2f452f4fdacdcf2f422f4fdacdcfae8a969a8bdacdcfb290919a86" style="color: #7FE5B0; border-bottom: 1px dashed #7FE5B0;"><span class="__cf_email__" data-cfemail="dca9acb3aeb9bfb7b3aaeeeee59cb1bdb5b0f2aea9">[email&#160;protected]</span></a>
+    </p>
   </div>
 </section>
 
@@ -391,23 +398,5 @@
   <p style="margin-top: 20px;">🖤</p>
 </footer>
 
-<script>
-  // Временная email-форма (без SendPulse).
-  // Открывает почтовый клиент пользователя с подготовленным письмом —
-  // ты получаешь подписку на свой email, вручную добавляешь в список.
-  // Когда соберёшь 30-50 подписок — заменишь на SendPulse-форму.
-  function submitEmail(e) {
-    e.preventDefault();
-    const email = e.target.email.value;
-    const subject = encodeURIComponent("Подписка на Quiet Money");
-    const body = encodeURIComponent(
-      "Подписываюсь на еженедельную рассылку и хочу получить PDF «Decoder Ring · 7 принципов тихих денег».\n\nМой email: " + email
-    );
-    // ⚠️ Замени hello@quietmoney.ru на свой реальный email
-    window.location.href = "mailto:uporeckov229@mail.ru?subject=" + subject + "&body=" + body;
-    return false;
-  }
-</script>
-
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0eabd7e8b989d9a',t:'MTc4MTk1ODE1OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0eacc440cb09d9a',t:'MTc4MTk1ODc2NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
