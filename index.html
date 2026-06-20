@@ -7,7 +7,9 @@
 <meta name="description" content="Финансовый трекер в тёмной теме. Один файл. Без подписки, без облака, без приложения. 990 ₽ или 2 990 ₽ — один раз, навсегда." />
 <meta property="og:title" content="Life & Finance OS · Quiet Money" />
 <meta property="og:description" content="Тихая таблица для тихих денег. Купите один раз — пользуйтесь навсегда." />
-<meta property="og:image" content="screenshots/v1.2-multi-platform/preview-google-sheets-desktop.jpg" />
+<meta property="og:image" content="screenshots/preview-google-sheets-desktop.jpg" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
 <style>
   /* ─────────── RESET ─────────── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -384,21 +386,28 @@
 
 <!-- ─────────── FOOTER ─────────── -->
 <footer>
-  <p><a href="https://t.me/lifefinanceos">@lifefinanceos</a> · <a href="https://t.me/LifeFinanceOSbot">@LifeFinanceOSbot</a></p>
+  <p><a href="https://t.me/quietmoney_ru">@quietmoney_ru</a> · <a href="https://t.me/LifeFinanceOSbot">@LifeFinanceOSbot</a></p>
   <p>Сделано тихо. Купите тихо. Используйте тихо.</p>
   <p style="margin-top: 20px;">🖤</p>
 </footer>
 
 <script>
+  // Временная email-форма (без SendPulse).
+  // Открывает почтовый клиент пользователя с подготовленным письмом —
+  // ты получаешь подписку на свой email, вручную добавляешь в список.
+  // Когда соберёшь 30-50 подписок — заменишь на SendPulse-форму.
   function submitEmail(e) {
     e.preventDefault();
     const email = e.target.email.value;
-    // TODO: заменить на реальный SendPulse API endpoint после настройки
-    // Сейчас редирект через mailto как fallback
-    alert("Спасибо! Письмо с PDF придёт через минуту на " + email + "\n\n(После настройки SendPulse эта форма будет работать автоматически)");
+    const subject = encodeURIComponent("Подписка на Quiet Money");
+    const body = encodeURIComponent(
+      "Подписываюсь на еженедельную рассылку и хочу получить PDF «Decoder Ring · 7 принципов тихих денег».\n\nМой email: " + email
+    );
+    // ⚠️ Замени hello@quietmoney.ru на свой реальный email
+    window.location.href = "mailto:hello@quietmoney.ru?subject=" + subject + "&body=" + body;
     return false;
   }
 </script>
 
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0eabd7e8b989d9a',t:'MTc4MTk1ODE1OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
